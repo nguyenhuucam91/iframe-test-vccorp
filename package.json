@@ -4,7 +4,7 @@
   "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "json-server": "npx json-server database/database.json --port=3000 --routes=database/routes.json",
+    "json-server": "npx json-server database/database.json --port=3000 --routes=database/routes.json --host=localhost",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "watch": "webpack --watch"
@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "chart.js": "^4.3.3",
+    "dotenv": "^16.3.1",
     "highcharts": "^11.1.0",
     "json-server": "^0.17.3"
   },
