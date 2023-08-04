@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Webpack App</title>
+    </head>
+    <body>
+        <!-- <canvas id="chartjs-bar-canvas"></canvas>
+        <canvas id="chartjs-bar2-canvas"></canvas> -->
+        <script src="./dist/main.js"></script>
+        <script>            
+            // const chart2 = ChartBar.init();
+            // chart2.apiUrl = "http://localhost:3000/api/chartjs-barchart"
+            // ChartBar.drawAt(chart2, "chartjs-bar-canvas")
+
+            // const chart3 = ChartBar.init();
+            // chart3.apiUrl = "http://localhost:3000/api/chartjs-barchart"
+            // ChartBar.drawAt(chart3, "chartjs-bar2-canvas")
+
+            for (let i = 1; i <= 20; i++) {
+                let cvs = document.createElement('canvas')
+                cvs.setAttribute('id', `chartjs-bar${i}-canvas`)
+                document.body.appendChild(cvs)
+            }
+
+            for(let i = 1; i <= 20;i++) {
+                let chart3 = ChartBar.init();
+                chart3.apiUrl = "http://localhost:3000/api/chartjs-barchart"
+                ChartBar.drawAt(chart3, `chartjs-bar${i}-canvas`)
+            }
+        </script>
+    </body>
+    
+</html>

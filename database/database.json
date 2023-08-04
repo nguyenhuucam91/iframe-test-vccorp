@@ -1,0 +1,105 @@
+{
+  "piechart": [{
+    "name": "Chrome",
+    "y": 70.67,
+    "sliced": true,
+    "selected": true
+  }, {
+    "name": "Edge",
+    "y": 14.77
+  }, {
+    "name": "Firefox",
+    "y": 4.86
+  }, {
+    "name": "Safari",
+    "y": 2.63
+  }, {
+    "name": "Internet Explorer",
+    "y": 1.53
+  }, {
+    "name": "Opera",
+    "y": 1.40
+  }, {
+    "name": "Sogou Explorer",
+    "y": 0.84
+  }, {
+    "name": "QQ",
+    "y": 0.51
+  }, {
+    "name": "Other",
+    "y": 2.6
+  }],
+
+  "barchart": [
+    {
+      "name": "Corn",
+      "data": [
+        406292,
+        260000,
+        107000,
+        68300,
+        27500,
+        14500
+      ]
+    },
+    {
+      "name": "Wheat",
+      "data": [
+        51086,
+        136000,
+        5500,
+        141000,
+        107180,
+        77000
+      ]
+    }
+  ],
+
+  "barchart2": [
+    {
+      "name": "Corn",
+      "data": [
+        4062,
+        2601,
+        107000,
+        68300,
+        27500,
+        14500
+      ]
+    },
+    {
+      "name": "Wheat",
+      "data": [
+        51086,
+        136000,
+        5500,
+        141000,
+        107180,
+        77000
+      ]
+    }
+  ],
+
+  "chartjs-barchart": [
+    {
+      "month": "Monday",
+      "value": "1"
+    },
+    {
+      "month": "Tuesday",
+      "value": "2"
+    },
+    {
+      "month": "Wednesday",
+      "value": "3"
+    },
+    {
+      "month": "Thursday",
+      "value": "4"
+    },
+    {
+      "month": "Friday",
+      "value": "5"
+    }
+  ]
+}
