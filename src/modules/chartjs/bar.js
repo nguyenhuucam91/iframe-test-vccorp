@@ -5,21 +5,12 @@ import Chart from 'chart.js/auto';
 const ChartBar = {
   init: function () {
     return {
-      apiUrl: '',
-      chartOptions: {
-        title: {
-          text: 'Alo 123123123',
-          align: 'right'
-        },
-        tooltip: {
-          valueSuffix: ' (1000 MT)'
-        },
-      }
-    };
+      apiUrl: ''
+    }
   },
 
   drawAt: async function (whichChart, elementId) {
-    const { apiUrl, chartOptions } = whichChart
+    const { apiUrl } = whichChart
     try {
       if (!apiUrl) {
         throw new ApiNotFoundError('Bar chart api url không được để trống');

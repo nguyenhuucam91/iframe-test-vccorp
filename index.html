@@ -17,15 +17,15 @@
             // chart3.apiUrl = "http://localhost:3000/api/chartjs-barchart"
             // ChartBar.drawAt(chart3, "chartjs-bar2-canvas")
 
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= 100; i++) {
                 let cvs = document.createElement('canvas')
                 cvs.setAttribute('id', `chartjs-bar${i}-canvas`)
                 document.body.appendChild(cvs)
             }
 
-            for(let i = 1; i <= 20;i++) {
+            for (let i = 1; i <= 100; i++) {
                 let chart3 = ChartBar.init();
-                chart3.apiUrl = "http://localhost:3000/api/chartjs-barchart"
+                chart3.apiUrl = `http://${window.location.host}/api/chartjs-barchart`
                 ChartBar.drawAt(chart3, `chartjs-bar${i}-canvas`)
             }
         </script>
