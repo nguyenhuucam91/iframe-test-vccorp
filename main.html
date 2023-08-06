@@ -25,7 +25,7 @@
 
             for (let i = 1; i <= 100; i++) {
                 let chart3 = ChartBar.init();
-                chart3.apiUrl = `http://${window.location.host}:3000/api/chartjs-barchart`
+                chart3.apiUrl = `http://ec2-3-81-181-4.compute-1.amazonaws.com:3000/api/chartjs-barchart`
                 ChartBar.drawAt(chart3, `chartjs-bar${i}-canvas`)
             }
         </script>
