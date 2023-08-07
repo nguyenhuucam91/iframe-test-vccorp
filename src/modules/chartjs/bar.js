@@ -15,10 +15,13 @@ const ChartBar = {
       if (!apiUrl) {
         throw new ApiNotFoundError('Bar chart api url không được để trống');
       }
-      const data = await api.get(apiUrl)
-    
+      const data = await api.get(apiUrl || ChartBar.init().apiUrl)
 
-      new Chart(elementId, {
+      if (Chart.getChart(elementId)) {
+        Chart.getChart(elementId).destroy()
+      }
+
+      return new Chart(elementId, {
         type: 'bar',
         data: {
           labels: data.map(item => item.month),
