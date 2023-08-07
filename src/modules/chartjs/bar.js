@@ -18,6 +18,7 @@ const ChartBar = {
       const data = await api.get(apiUrl || ChartBar.init().apiUrl)
 
       if (Chart.getChart(elementId)) {
+        // @ts-ignore
         Chart.getChart(elementId).destroy()
       }
 
