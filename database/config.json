@@ -1,0 +1,4 @@
+{
+  "host": "localhost",
+  "routes": "database/routes.json"
+}
