@@ -1,15 +1,12 @@
 # 🚀 Welcome to your new awesome project!
 
-This project has been created using **webpack-cli**, you can now run
+To build project after modifying code in src/ folder, run `npm run build`
 
-```
-npm run build
-```
+To keep refreshing when modifying code in development environment in src/ folder, run `npm run watch`
 
-or
+Run iframe.html to test iframe, which endpoint is served in 2 different projects. The first project served api in one amazon host,
+the other project served fetching chartjs diagram in another amazon hosts. There are 2 amazon hosts in total.
 
-```
-yarn build
-```
+Api is fetched using json-server library, refer to `https://github.com/typicode/json-server` for more details
 
-to bundle your application
+Project is using lazy loading chart, which use IntersectionObserver to achieve this.
