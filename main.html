@@ -7,13 +7,6 @@
     <body>
         <script src="./dist/main.js"></script>
         <script>     
-            // const chart2 = ChartBar.init();
-            // chart2.apiUrl = "http://localhost:3000/api/chartjs-barchart"
-            // ChartBar.drawAt(chart2, "chartjs-bar-canvas")
-
-            // const chart3 = ChartBar.init();
-            // chart3.apiUrl = "http://localhost:3000/api/chartjs-barchart"
-            // ChartBar.drawAt(chart3, "chartjs-bar2-canvas")
             for (let i = 1; i <= 100; i++) {
                 let heading = document.createElement('h3')
                 let cvs = document.createElement('canvas')
@@ -27,11 +20,11 @@
             const intersectionObserver = new IntersectionObserver(entries => entries.forEach(entry => {
                 const target = entry.target
                 if (entry.isIntersecting && !target.getAttribute('data-show')) {
-                    let chart3 = ChartBar.init();
+                    let chartJs = ChartBar.init();
                     const dataIndex = target.getAttribute('data-index')
                     target.setAttribute('data-show', true)
-                    chart3.apiUrl = `http://ec2-3-81-181-4.compute-1.amazonaws.com:3000/api/chartjs-barchart`
-                    ChartBar.drawAt(chart3, `chartjs-bar${dataIndex}-canvas`)
+                    chartJs.apiUrl = `http://ec2-3-81-181-4.compute-1.amazonaws.com:3000/api/chartjs-barchart`
+                    ChartBar.drawAt(chartJs, `chartjs-bar${dataIndex}-canvas`)
                 }
             }))
 
