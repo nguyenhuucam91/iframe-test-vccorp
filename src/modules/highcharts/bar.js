@@ -1,5 +1,6 @@
 import api from '../../api'
 import ApiNotFoundError from '../../errors/ApiNotFoundError';
+import HighCharts from 'highcharts';
 
 const ChartBar = {
   init: function () {
@@ -23,40 +24,41 @@ const ChartBar = {
         throw new ApiNotFoundError('Bar chart api url không được để trống');
       }
       const data = await api.get(apiUrl)
-
+      console.log('data', data)
+      console.log('elementId', elementId)
       // @ts-ignore
-      // HighCharts.chart(elementId, {
-      //   chart: {
-      //     type: 'column'
-      //   },
-      //   subtitle: {
-      //     text:
-      //       'Source: <a target="_blank" ' +
-      //       'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
-      //     align: 'left'
-      //   },
-      //   xAxis: {
-      //     categories: ['USA', 'China', 'Brazil', 'EU', 'India', 'Russia'],
-      //     crosshair: true,
-      //     accessibility: {
-      //       description: 'Countries'
-      //     }
-      //   },
-      //   yAxis: {
-      //     min: 0,
-      //     title: {
-      //       text: '1000 metric tons (MT)'
-      //     }
-      //   },
-      //   plotOptions: {
-      //     column: {
-      //       pointPadding: 0.2,
-      //       borderWidth: 0
-      //     }
-      //   },
-      //   series: data,
-      //   ...chartOptions
-      // });
+      HighCharts.chart(elementId, {
+        chart: {
+          type: 'column'
+        },
+        subtitle: {
+          text:
+            'Source: <a target="_blank" ' +
+            'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+          align: 'left'
+        },
+        xAxis: {
+          categories: ['USA', 'China', 'Brazil', 'EU', 'India', 'Russia'],
+          crosshair: true,
+          accessibility: {
+            description: 'Countries'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: '1000 metric tons (MT)'
+          }
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+          }
+        },
+        series: data,
+        ...chartOptions
+      });
     } catch (e) {
       console.error(e)
     }

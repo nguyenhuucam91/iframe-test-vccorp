@@ -40,7 +40,7 @@ const ChartBar = {
           }
         }
       })
-      
+
     } catch (e) {
       console.error(e)
     }
