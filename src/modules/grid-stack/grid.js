@@ -1,4 +1,6 @@
 import {GridStack} from "gridstack";
+import '../../../node_modules/gridstack/dist/gridstack.min.css'
+import '../../../node_modules/gridstack/dist/gridstack-extra.css'
 
 let grid = {
     init: function () {

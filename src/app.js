@@ -1,3 +1,8 @@
+import reportDashBoard from "./modules/report/report";
+import ChartPie from "./modules/highcharts/pie";
+import ChartTable from "./modules/tables/table";
+import grid from "./modules/grid-stack/grid";
+
 const urlCurrent = document.URL;
 let reportId = urlCurrent.substring(urlCurrent.lastIndexOf('/') + 1);
 if (reportId === '' || reportId === 'index.html') {
@@ -7,6 +12,7 @@ const report = reportDashBoard.init();
 report.apiUrl = `https://cdp-reporting.admicro.vn/api/v1/report/public/get-by-id/${reportId}`
 
 const reportData = reportDashBoard.getReportDetail(report.apiUrl);
+
 reportData.then(result => {
     let nameReport = document.getElementById('name-report')
     nameReport.innerHTML = result.results.name ?? '';
@@ -47,10 +53,9 @@ reportData.then(result => {
 
         domChart.appendChild(divChart);
 
-        const chartContainer = document.getElementById('chart-container');
-        chartContainer.appendChild(domChart);
+        document.getElementById('chart-container')?.appendChild(domChart);
 
-        this.initChart(item);
+        initChart(item);
     });
 
     grid.init();
