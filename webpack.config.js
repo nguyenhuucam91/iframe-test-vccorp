@@ -3,19 +3,23 @@
 const path = require('path');
 // const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
 const isProduction = process.env.NODE_ENV == 'production';
 
 
 const config = {
     entry: './src/index.js',
     output: {
+        filename: 'main.min.js',
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin({
+            filename: 'main.min.css'
+        })
     ],
     performance: {
         maxEntrypointSize: 1024000,
@@ -40,7 +44,7 @@ const config = {
         ],
     },
     optimization: {
-        // minimizer: [new CssMinimizerPlugin()]
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
     },
 };
 

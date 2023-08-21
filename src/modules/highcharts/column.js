@@ -8,6 +8,7 @@ const defaultColor = environment.typeColor;
 
 let idReport;
 let idChart;
+
 const dataConditionForIsConfig = [];
 
 const dataResult = {
@@ -26,6 +27,7 @@ const chartConfig = {
     showLegend: true,
     configLegendPie: [],
     optionLegend: 'bottom',
+    xAxisName: "",
     goalLineData: {
         enabled: false,
         value: 0
@@ -34,7 +36,7 @@ const chartConfig = {
 
 let chartOptions = {}
 
-const ChartBar = {
+const ChartColumn = {
     listChartId: [],
     init: function () {
         return {
@@ -42,43 +44,49 @@ const ChartBar = {
             apiUrl: ''
         }
     },
-    drawAt: async (chartId) => {
+    drawAt: async (chartId, reportId) => {
+        idReport = reportId;
+        idChart = chartId;
+
         try {
-            ChartBar.listChartId.push(chartId);
+            ChartColumn.listChartId.push(chartId);
             setTimeout(() => {
                 const checkPosition = Base.handleLazyLoadChart(chartId);
                 if (checkPosition) {
-                    ChartBar.getData(chartId);
+                    ChartColumn.getData(chartId);
                 }
             }, 300);
 
             addEventListener("scroll", (event) => {
                 const subscribeScroll = Base.handleLazyLoadChart(chartId);
                 if (subscribeScroll) {
-                    ChartBar.getData(chartId);
+                    ChartColumn.getData(chartId);
                 }
             });
+
         } catch (e) {
             console.error(e)
         }
     },
     getData: async function (chartId) {
-        if (ChartBar.listChartId.includes(chartId)) {
+        if (ChartColumn.listChartId.includes(chartId)) {
             let apiUrl = 'https://cdp-reporting.admicro.vn/api/v1/chart/public/query-data-by-condition/{CHART_ID}';
             apiUrl = apiUrl.replace('{CHART_ID}', chartId);
             const body = {
                 filters: []
             };
 
-            const index = ChartBar.listChartId.indexOf(chartId);
+            const index = ChartColumn.listChartId.indexOf(chartId);
             if (index > -1) {
-                ChartBar.listChartId.splice(index, 1);
+                ChartColumn.listChartId.splice(index, 1);
             }
+
             Base.setLoading(true);
             const data = await api.post(apiUrl, body);
             Base.setLoading(false);
             if (data?.status === 1) {
-                ChartBar.handleData(data.chart, chartId);
+
+                ChartColumn.handleData(data.chart, chartId);
             }
         }
     },
@@ -99,9 +107,9 @@ const ChartBar = {
         chartConfig.legendValueItem = result?.config?.chart?.legendValueItem;
         chartService.convertDate(dataResult.schema, dataResult.data);
         if (chartConfig.legendData?.length) {
-            ChartBar.initChart(chartConfig.legendData);
+            ChartColumn.initChart(chartConfig.legendData);
         } else {
-            ChartBar.initChart([], chartConfig.yAxisData, dataResult.data, chartConfig.xAxisData);
+            ChartColumn.initChart([], chartConfig.yAxisData, dataResult.data, chartConfig.xAxisData);
         }
         const data = dataResult.data,
             schema = dataResult.schema,
@@ -116,7 +124,6 @@ const ChartBar = {
         chartOptions.series = [];
 
         let categories = [];
-
 
         for (const i in data) {
             categories.push(data[i][xSchema?.field_alias]);
@@ -150,11 +157,12 @@ const ChartBar = {
             point: {
                 events: {
                     click: function (event) {
-                        chartService.redirectLinkChart(xSchema, this.category, idChart, idReport, dataConditionForIsConfig);
+                        chartService?.redirectLinkChart(xSchema, this.category, idChart, idReport, dataConditionForIsConfig);
                     }
                 }
             }
         };
+
         chartOptions.plotOptions.series.stacking = chartConfig.showStacked ?? 'normal';
 
         if (chartConfig.showStacked) {
@@ -168,7 +176,7 @@ const ChartBar = {
 
         chartOptions.yAxis[0].title.text = chartConfig.yAxisName;
         chartOptions.yAxis[1].title.text = chartConfig.yAxisNameRight;
-        if (chartConfig.legendData && chartConfig.legendData?.length > 0) {
+        if (chartConfig.legendData && chartConfig.legendData.length > 0) {
             const resultArray = chartService.setUniqueLegendValueItem(dataResult, chartConfig);
             if (!chartService.checkArrays(resultArray, chartConfig.legendValueItem, chartConfig)) {
                 // Set lại giá trị của legend value item để chúng có thể phù hợp để change color , .....
@@ -203,9 +211,7 @@ const ChartBar = {
                 if (typeof chartConfig.legendValueItem !== 'undefined') {
                     seriesData.name = chartConfig.legendValueItem[z]?.customLabel || chartConfig.legendValueItem[z]?.customLabel === '' ? chartConfig.legendValueItem[z]?.customLabel : chartConfig.legendValueItem[z][chartConfig.legendData[0]?.fieldAlias];
                 }
-
                 for (const i in yAxisData) {
-
                     for (const j in yAxisData[i]) {
                         const dataSeries = data.filter(obj => obj[chartConfig?.legendData[0]?.fieldAlias] === chartConfig.legendValueItem[z][chartConfig?.legendData[0]?.fieldAlias]);
                         dataSeries.sort((a, b) => {
@@ -222,17 +228,15 @@ const ChartBar = {
                 chartOptions.series.push(seriesData);
             }
         } else {
-
             for (const i in yAxisData) {
-
                 for (const j in yAxisData[i]) {
                     const yAxis = yAxisData[i][j],
                         ySchema = schema.find(item => {
                             return item.field_alias === yAxis.fieldAlias;
                         });
                     if (!yAxisData[i][j]?.color) {
-                        const colorIndex = Number(j) % (defaultColor?.length - 1); // Lấy vị trí của màu tương ứng
-                        const color = defaultColor[colorIndex + 1]; // Lấy mã màu từ mảng colors
+                        const colorIndex = Number(j) % (defaultColor.length - 1); // Lấy vị trí của màu tương ứng
+                        const color = defaultColor[colorIndex + 1];
                         yAxisData[i][j].color = color.value;
                     }
                     const seriesData = {
@@ -274,15 +278,16 @@ const ChartBar = {
                 }
             }
         }
-        ChartBar.createChart(chartId);
+        ChartColumn.createChart(chartId);
     },
     createChart: function (chartId) {
         HighCharts.chart(`chart-item-${chartId}`, chartOptions)
     },
+
     initChart(legendData, data, pointData, xAxisData) {
         chartOptions = {
             chart: {
-                type: 'bar'
+                type: 'column'
             },
             credits: {
                 enabled: false,
@@ -344,7 +349,6 @@ const ChartBar = {
                         return tooltip;
                     } else {
                         let tooltip = '<b>' + this?.x + '</b><br/>';
-                        // let tooltip;
                         // Lặp qua các series
                         this.points.forEach((point) => {
                             tooltip += '<span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': <b>' + chartService.customNumberFormat(point?.y, point.y % 1 === 0 ? 0 : 2, ".", ",") + '</b><br/>';
@@ -383,4 +387,4 @@ const ChartBar = {
     },
 }
 
-export default ChartBar
+export default ChartColumn

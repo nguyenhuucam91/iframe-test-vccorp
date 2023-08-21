@@ -1,0 +1,7 @@
+{
+    "common": {
+        "loading": "Đang tải dữ liệu...",
+        "autoRefresh": "Tự động tải lại",
+        "off": "Tắt"
+    }
+}

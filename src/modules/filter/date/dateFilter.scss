@@ -1,0 +1,53 @@
+:focus-visible {
+    outline: none !important;
+}
+
+.p-10 {
+    padding: 10px !important;
+}
+
+.checkbox {
+    display: inline-block;
+    height: 16px;
+    line-height: 0;
+    margin: auto;
+    margin-right: 8px;
+    order: 0;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+
+.date-between {
+    display: flex;
+    justify-content: center;
+}
+
+.w-49 {
+    width: 49%;
+}
+
+.style-select select, .style-select input {
+    border: 1px solid transparent;
+    box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d;
+    padding: 8px 30px 8px 8px;
+    height: 36px;
+    font-size: 12px;
+    margin-bottom: 0;
+    position: relative;
+    border-top: 1px solid #e5e5e5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    width: 100%;
+}
+
+.style-select select:hover, .style-select input:hover {
+    border-top-color: #4285f4!important;
+    border: 1px solid #4285f4!important;
+}

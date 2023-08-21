@@ -1,0 +1,26 @@
+.label-value-number {
+  font-weight: 900;
+  white-space: pre;
+  font-size: 35px;
+  color: #4c5773;
+}
+.chart-number {
+  text-align: center;
+}
+.text-label {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: normal;
+  color: #4c5773;
+}
+
+.chart-number :hover {
+  color: #2196F3;
+}
+
+.section-chart-number .chart-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

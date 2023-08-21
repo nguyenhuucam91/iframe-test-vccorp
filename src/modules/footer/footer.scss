@@ -1,0 +1,179 @@
+#footer-report {
+    width: 100%;
+    background-color: #fff;
+}
+.footer-public-report {
+    padding: 10px 14px;
+    width: 100%;
+    display: flex;
+    border-top: 1px solid #ddd!important;
+    justify-content: space-between!important;
+    background-color: #fff;
+
+    .title-bottom {
+        display: flex;
+        line-height: 34px;
+        align-items: center;
+
+        .logo-mini {
+            display: flex;
+            align-items: center;
+            color: #2196f3;
+            text-decoration: none;
+
+            &:hover {
+                color: #0a6ebd;
+            }
+
+            img {
+                width: 22px;
+                height: auto;
+                margin-right: 6px;
+            }
+
+            span {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .config-language {
+        margin: auto 10px auto 0;
+        position: relative;
+
+        a {
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .arrow-language {
+            height: 12px;
+            width: 12px;
+            min-width: 12px;
+            position: relative;
+            display: flex;
+            color: #757575;
+            margin: 0 0 0 6px;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .button-fullscreen {
+        padding: 6px 10px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-flex;
+        align-items: center;
+        font-weight: 500;
+        background-color: transparent;
+        border: 1px solid transparent;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: 0 0 0 62.5rem #00000013 inset;
+        }
+        svg {
+            color: #333;
+            font-size: 14px;
+        }
+    }
+
+    .box-select-language {
+        right: -120px;
+        bottom: 120%;
+        top: unset;
+        left: unset;
+        margin: 0;
+
+        &.show {
+            display: block;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+            outline: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            margin-bottom: 0;
+            padding: 8px 20px;
+            transition: background-color ease-in-out .15s,color ease-in-out .15s;
+
+            &:hover {
+                background-color: #f5f5f5;
+            }
+
+            &:active {
+                color: #1890ff;
+            }
+
+            img {
+                margin-right: 10px;
+                height: 19px;
+            }
+        }
+
+        .language-item+.language-item {
+            margin-top: 1px;
+        }
+    }
+}
+
+.footer-option {
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+}
+
+.auto-refresh {
+    position: relative;
+    float: right;
+
+    button {
+        padding: 6px 10px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-flex;
+        align-items: center;
+        font-weight: 500;
+        background-color: transparent;
+        border: 1px solid transparent;
+        height: 34px;
+
+        &:hover {
+            box-shadow: 0 0 0 62.5rem #00000013 inset;
+        }
+
+        span {
+            display: none;
+            margin-right: 10px;
+            line-height: 20px;
+        }
+
+        &.active {
+            box-shadow: 0 0 0 62.5rem #00000013 inset;
+
+            span {
+                display: inline-block;
+            }
+        }
+
+        svg {
+            color: #333;
+            font-size: 14px;
+        }
+    }
+}

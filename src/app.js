@@ -1,88 +1,110 @@
 import reportDashBoard from "./modules/report/report";
-import ChartPie from "./modules/highcharts/pie";
 import ChartTable from "./modules/tables/table";
 import grid from "./modules/grid-stack/grid";
+import Filter from "./modules/filter/filter";
+import ChartPie from "./modules/highcharts/pie";
+import ChartLine from "./modules/highcharts/line";
+import ChartColumn from "./modules/highcharts/column";
+import ChartBar from "./modules/highcharts/bar";
+import ChartArea from "./modules/highcharts/area";
+import ChartNumber from "./modules/number-chart/number";
+import footer from "./modules/footer/footer";
+import LocalStorageService from "./modules/services/local-storage.service";
 
 const urlCurrent = document.URL;
+
 let reportId = urlCurrent.substring(urlCurrent.lastIndexOf('/') + 1);
 if (reportId === '' || reportId === 'index.html') {
     reportId = '290';
 }
+
+await LocalStorageService.initLanguage();
+
 const report = reportDashBoard.init();
-report.apiUrl = `https://cdp-reporting.admicro.vn/api/v1/report/public/get-by-id/${reportId}`
+report.apiUrl = `https://cdp-reporting.admicro.vn/api/v1/report/public/get-by-id/${reportId}?key=WrlVPnVuAywINfRFXwCcHrgfp`
 
 const reportData = reportDashBoard.getReportDetail(report.apiUrl);
+let processDashboardConfig = [];
+let processDataFilter = [];
+let processResults = null;
+const filterInstance = Object.create(Filter);
 
 reportData.then(result => {
-    let nameReport = document.getElementById('name-report')
-    nameReport.innerHTML = result.results.name ?? '';
+    processResults = result ?? null;
+    processDashboardConfig = result.dashboardConfig ?? [];
+    processDataFilter = result.filter ?? [];
+    PROCESS.init();
+    footer.init();
+    footer.loadEvent();
 
-    const listChart = result.dashboardConfig;
-
-    listChart.forEach((item, index) => {
-        let domChart = document.createElement('div');
-        // domChart.setAttribute('id', `chart-item-${item.report.id}`)
-        domChart.setAttribute('class', `chart-item`)
-        domChart.setAttribute('class', `grid-stack-item`)
-        domChart.setAttribute('gs-i', index)
-        domChart.setAttribute('gs-x', item.x)
-        domChart.setAttribute('gs-y', item.y)
-        domChart.setAttribute('gs-w', item.w)
-        domChart.setAttribute('gs-h', item.h)
-        domChart.setAttribute('widget-configs', '')
-
-        // domChart.textContent = item.report.configs.title;
-
-        let divTitle = document.createElement('h4');
-        divTitle.setAttribute('class', `chart-title`)
-        divTitle.textContent = item.report.configs.title ?? '';
-
-        let divChart = document.createElement('div');
-        divChart.setAttribute('class', `chart-info`)
-        divChart.setAttribute('type-chart', item.report.configs.visualizeType)
-
-        divChart.appendChild(divTitle);
-
-        if (item.report.configs.visualizeType !== 'chart-string') {
-            let divChartId = document.createElement('div');
-            divChartId.setAttribute('id', `chart-item-${item.report.id}`)
-            divChartId.setAttribute('class', `chart-item`)
-
-            divChart.appendChild(divChartId);
-        }
-
-        domChart.appendChild(divChart);
-
-        document.getElementById('chart-container')?.appendChild(domChart);
-
-        initChart(item);
-    });
-
-    grid.init();
 })
+function handleFooterEventInApp(event) {
+    const updatedUrl = event.detail;
+    console.log("Received updated URL:", updatedUrl);
+    const urlSearchParams = new URLSearchParams(updatedUrl.split('?')[1]);
+    const queryParams = Object.fromEntries(urlSearchParams.entries());
 
-function initChart(item) {
-    const typeChart = item.report.configs.visualizeType
-    // console.log('typeChart', typeChart);
-    // console.log('item.report.id', item.report.id);
-    switch (typeChart) {
-        case 'chart-pie':
-            let chart = ChartPie.init();
-            chart.chartId = item.report.id;
-            ChartPie.drawAt(chart.chartId);
-            break;
-        case 'table':
-            ChartTable.drawAt(item.report.id);
-            // let chart = ChartPie.init();
-            // chart.chartId = item.report.id;
-            // ChartPie.drawAt(chart.chartId);
-            break;
-        case 'chart-column':
-            break
-        default:
-            break;
+    // Kiểm tra xem tham số 'refresh' có tồn tại không
+    if ('refresh' in queryParams) {
+        const refreshValue = queryParams['refresh'];
+        console.log(`Refresh value is: ${refreshValue}`);
+        setTimeout(() => {
+            console.log("Log after 5000ms");
+        }, 5000);
     }
+};
+window.addEventListener('footerEvent', handleFooterEventInApp);
+const PROCESS = {
+    init: () => {
+        let nameReport = document.getElementById('name-report');
+        nameReport.innerHTML = processResults.results.name ?? '';
+        Filter.init('filter', processResults);
+        grid.init(processDashboardConfig);
+        PROCESS.reloadAll();
+
+        Filter.onDataFilterChange = (newDataFilter) => {
+            //You can set a new data filter. Furthermore => tri
+            // The data conditions have changed, and you call for reloading the data here. => tri
+            console.log("New data filter:", newDataFilter);
+        };
+
+    },
+    initChart: (item, dataFilter) => {
+        const typeChart = item.report.configs.visualizeType;
+        switch (typeChart) {
+            case 'chart-area':
+                ChartArea.drawAt(item.report.id, reportId);
+                break;
+            case 'chart-bar':
+                ChartBar.drawAt(item.report.id, reportId);
+                break;
+            case 'chart-column':
+                ChartColumn.drawAt(item.report.id, reportId);
+                break;
+            case 'chart-line':
+                ChartLine.drawAt(item.report.id, reportId)
+                break;
+            case 'chart-pie':
+                ChartPie.drawAt(item.report.id, reportId);
+                break;
+            case 'table':
+                ChartTable.drawAt(item.report.id, reportId, dataFilter);
+                break;
+            case 'chart-number':
+                ChartNumber.drawAt(item.report.id);
+                break;
+            default:
+                break;
+        }
+    },
+
+    reloadAll: () => {
+        for (const item of processDashboardConfig) {
+            PROCESS.initChart(item, processDataFilter);
+        }
+    },
 }
+
 
 // for (let i = 1; i <= 2; i++) {
 //     let heading = document.createElement('h3')

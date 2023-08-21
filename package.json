@@ -16,7 +16,10 @@
     "dotenv": "^16.3.1",
     "gridstack": "^8.3.0",
     "highcharts": "^11.1.0",
-    "json-server": "^0.17.3"
+    "js-datepicker": "^5.18.2",
+    "json-server": "^0.17.3",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "terser-webpack-plugin": "^5.3.9"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",

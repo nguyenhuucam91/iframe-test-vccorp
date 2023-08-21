@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Webpack App</title>
-        <link rel="stylesheet" href="./dist/main.css">
-    </head>
-    <body>
-        <h4 id="name-report"></h4>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>CDP for Reporting - Admicro.vn</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=1" />
+    <link rel="stylesheet" href="./dist/main.min.css">
+</head>
+<body>
+<div class="content app-content position-relative section-public-report">
+    <div class="loading" id="data-loading">
+        <span class="text-loading">Loading...</span>
+    </div>
+    <div>
+        <h4 id="name-report" class="name-report"></h4>
+        <div id="filter"></div>
         <div class="grid-container">
             <div id="chart-container" class="chart-container-cdp grid-stack"></div>
         </div>
-        <script src="./dist/main.js"></script>
-    </body>
+    </div>
+</div>
+<div id="footer-report" class="footer"></div>
+<script src="./dist/main.min.js"></script>
+</body>
 </html>

@@ -3,13 +3,11 @@ import HighCharts from "highcharts";
 import {environment} from "../../environments/environment";
 import chartService from "../services/chartService";
 import Base from "../_base/base";
-
 const defaultColor = environment.typeColor;
-
 let idReport;
 let idChart;
-const dataConditionForIsConfig = [];
 
+const dataConditionForIsConfig = [];
 const dataResult = {
     data: [],
     schema: []
@@ -34,7 +32,7 @@ const chartConfig = {
 
 let chartOptions = {}
 
-const ChartBar = {
+const ChartArea = {
     listChartId: [],
     init: function () {
         return {
@@ -42,20 +40,22 @@ const ChartBar = {
             apiUrl: ''
         }
     },
-    drawAt: async (chartId) => {
+    drawAt: async (chartId, reportId) => {
+        idReport = reportId;
+        idChart = chartId;
         try {
-            ChartBar.listChartId.push(chartId);
+            ChartArea.listChartId.push(chartId);
             setTimeout(() => {
                 const checkPosition = Base.handleLazyLoadChart(chartId);
                 if (checkPosition) {
-                    ChartBar.getData(chartId);
+                    ChartArea.getData(chartId);
                 }
             }, 300);
 
             addEventListener("scroll", (event) => {
                 const subscribeScroll = Base.handleLazyLoadChart(chartId);
                 if (subscribeScroll) {
-                    ChartBar.getData(chartId);
+                    ChartArea.getData(chartId);
                 }
             });
         } catch (e) {
@@ -63,22 +63,23 @@ const ChartBar = {
         }
     },
     getData: async function (chartId) {
-        if (ChartBar.listChartId.includes(chartId)) {
+        if (ChartArea.listChartId.includes(chartId)) {
             let apiUrl = 'https://cdp-reporting.admicro.vn/api/v1/chart/public/query-data-by-condition/{CHART_ID}';
             apiUrl = apiUrl.replace('{CHART_ID}', chartId);
             const body = {
                 filters: []
             };
 
-            const index = ChartBar.listChartId.indexOf(chartId);
+            const index = ChartArea.listChartId.indexOf(chartId);
             if (index > -1) {
-                ChartBar.listChartId.splice(index, 1);
+                ChartArea.listChartId.splice(index, 1);
             }
             Base.setLoading(true);
             const data = await api.post(apiUrl, body);
             Base.setLoading(false);
             if (data?.status === 1) {
-                ChartBar.handleData(data.chart, chartId);
+
+                ChartArea.handleData(data.chart, chartId);
             }
         }
     },
@@ -99,9 +100,9 @@ const ChartBar = {
         chartConfig.legendValueItem = result?.config?.chart?.legendValueItem;
         chartService.convertDate(dataResult.schema, dataResult.data);
         if (chartConfig.legendData?.length) {
-            ChartBar.initChart(chartConfig.legendData);
+            ChartArea.initChart(chartConfig.legendData);
         } else {
-            ChartBar.initChart([], chartConfig.yAxisData, dataResult.data, chartConfig.xAxisData);
+            ChartArea.initChart([], chartConfig.yAxisData, dataResult.data, chartConfig.xAxisData);
         }
         const data = dataResult.data,
             schema = dataResult.schema,
@@ -117,7 +118,6 @@ const ChartBar = {
 
         let categories = [];
 
-
         for (const i in data) {
             categories.push(data[i][xSchema?.field_alias]);
         }
@@ -125,7 +125,6 @@ const ChartBar = {
         categories = categories.filter((item, index) => {
             return categories.indexOf(item) === index;
         });
-
         if (chartConfig.goalLineData && typeof chartConfig.goalLineData.enabled !== 'undefined' && chartConfig.goalLineData.enabled === true) {
             chartOptions.yAxis[0].plotLines = [{
                 color: '#aa0000',
@@ -155,6 +154,7 @@ const ChartBar = {
                 }
             }
         };
+
         chartOptions.plotOptions.series.stacking = chartConfig.showStacked ?? 'normal';
 
         if (chartConfig.showStacked) {
@@ -168,7 +168,7 @@ const ChartBar = {
 
         chartOptions.yAxis[0].title.text = chartConfig.yAxisName;
         chartOptions.yAxis[1].title.text = chartConfig.yAxisNameRight;
-        if (chartConfig.legendData && chartConfig.legendData?.length > 0) {
+        if (chartConfig.legendData && chartConfig.legendData.length > 0) {
             const resultArray = chartService.setUniqueLegendValueItem(dataResult, chartConfig);
             if (!chartService.checkArrays(resultArray, chartConfig.legendValueItem, chartConfig)) {
                 // Set lại giá trị của legend value item để chúng có thể phù hợp để change color , .....
@@ -203,9 +203,7 @@ const ChartBar = {
                 if (typeof chartConfig.legendValueItem !== 'undefined') {
                     seriesData.name = chartConfig.legendValueItem[z]?.customLabel || chartConfig.legendValueItem[z]?.customLabel === '' ? chartConfig.legendValueItem[z]?.customLabel : chartConfig.legendValueItem[z][chartConfig.legendData[0]?.fieldAlias];
                 }
-
                 for (const i in yAxisData) {
-
                     for (const j in yAxisData[i]) {
                         const dataSeries = data.filter(obj => obj[chartConfig?.legendData[0]?.fieldAlias] === chartConfig.legendValueItem[z][chartConfig?.legendData[0]?.fieldAlias]);
                         dataSeries.sort((a, b) => {
@@ -216,22 +214,20 @@ const ChartBar = {
                         dataSeries.map((value, index) => {
                             seriesData.data.push(value[yAxisData[0][0].fieldAlias] ?? null);
                         });
-                        chartOptions.yAxis[0].max = chartConfig.goalLineData?.enabled && chartConfig.goalLineData?.value >= Math.max(...seriesData.data) ? chartConfig.goalLineData?.value + 4 : null;
+                        chartOptions.yAxis[0].max = chartConfig.goalLineData?.enabled && chartConfig.goalLineData?.value >= Math.max(...seriesData.data)  ? chartConfig.goalLineData?.value + 4 : null;
                     }
                 }
                 chartOptions.series.push(seriesData);
             }
         } else {
-
             for (const i in yAxisData) {
-
                 for (const j in yAxisData[i]) {
                     const yAxis = yAxisData[i][j],
                         ySchema = schema.find(item => {
                             return item.field_alias === yAxis.fieldAlias;
                         });
                     if (!yAxisData[i][j]?.color) {
-                        const colorIndex = Number(j) % (defaultColor?.length - 1); // Lấy vị trí của màu tương ứng
+                        const colorIndex = Number(j) % (defaultColor.length - 1); // Lấy vị trí của màu tương ứng
                         const color = defaultColor[colorIndex + 1]; // Lấy mã màu từ mảng colors
                         yAxisData[i][j].color = color.value;
                     }
@@ -269,12 +265,12 @@ const ChartBar = {
                     for (const z in data) {
                         seriesData.data.push(data[z][ySchema?.field_alias] ?? null);
                     }
-                    chartOptions.yAxis[0].max = chartConfig.goalLineData?.enabled && chartConfig.goalLineData?.value >= Math.max(...seriesData.data) ? chartConfig.goalLineData?.value + 4 : null;
+                    chartOptions.yAxis[0].max = chartConfig.goalLineData?.enabled && chartConfig.goalLineData?.value >= Math.max(...seriesData.data)  ? chartConfig.goalLineData?.value + 4 : null;
                     chartOptions.series.push(seriesData);
                 }
             }
         }
-        ChartBar.createChart(chartId);
+        ChartArea.createChart(chartId);
     },
     createChart: function (chartId) {
         HighCharts.chart(`chart-item-${chartId}`, chartOptions)
@@ -282,7 +278,7 @@ const ChartBar = {
     initChart(legendData, data, pointData, xAxisData) {
         chartOptions = {
             chart: {
-                type: 'bar'
+                type: 'area'
             },
             credits: {
                 enabled: false,
@@ -383,4 +379,4 @@ const ChartBar = {
     },
 }
 
-export default ChartBar
+export default ChartArea
